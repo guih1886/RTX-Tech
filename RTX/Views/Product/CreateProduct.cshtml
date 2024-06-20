@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Cadastro de Produto";
 }
-<form asp-controller="Home" asp-action="CreateProduct" method="post">
+<form asp-controller="Product" asp-action="CreateProduct" method="post">
     <div class="mb-3">
         <label for="image" class="form-label">Imagem</label>
         <input asp-for="Photo" class="form-control" id="image">
@@ -20,5 +20,5 @@
         <input asp-for="Price" class="form-control" id="price" maxlength="5">
     </div>
     <button type="submit" class="btn btn-primary">Cadastrar</button>
-    <button class="btn btn-danger" asp-controller="Home" asp-action="Index">Voltar</button>
+    <button class="btn btn-danger" asp-controller="Product" asp-action="Index">Voltar</button>
 </form>
