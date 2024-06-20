@@ -1,0 +1,24 @@
+﻿@model Product
+@{
+    ViewData["Title"] = "Cadastro de Produto";
+}
+<form asp-controller="Home" asp-action="CreateProduct" method="post">
+    <div class="mb-3">
+        <label for="image" class="form-label">Imagem</label>
+        <input asp-for="Photo" class="form-control" id="image">
+    </div>
+    <div class="mb-3">
+        <label for="name" class="form-label">Nome</label>
+        <input asp-for="Name" class="form-control" id="name" maxlength="100">
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Descrição</label>
+        <input asp-for="Description" class="form-control" id="description" maxlength="320">
+    </div>
+    <div class="mb-3">
+        <label for="price" class="form-label">Preço</label>
+        <input asp-for="Price" class="form-control" id="price" maxlength="5">
+    </div>
+    <button type="submit" class="btn btn-primary">Cadastrar</button>
+    <button class="btn btn-danger" asp-controller="Home" asp-action="Index">Voltar</button>
+</form>
