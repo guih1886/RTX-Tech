@@ -2,17 +2,26 @@
 using RTX.Data.Interfaces;
 using RTX.Models;
 
-namespace RTX.Controllers.Product;
+namespace RTX.Controllers.ProductController;
 
-[ApiController]
-[Route("Products")]
-public class ProductController : ControllerBase
+public class ProductController : Controller
 {
     private IProductRepository _productRepository;
 
     public ProductController(IProductRepository productRepository)
     {
         _productRepository = productRepository;
+    }
+
+    public IActionResult Index()
+    {
+        List<Product>? produtos = _productRepository.GetProducts();
+        return View(produtos);
+    }
+
+    public IActionResult CreateProduct()
+    {
+        return View();
     }
 
     [HttpGet]
@@ -30,5 +39,12 @@ public class ProductController : ControllerBase
             return Ok(produto);
         }
         return NotFound("Produto não encontrado.");
+    }
+
+    [HttpPost]
+    public IActionResult CreateProduct(Product product)
+    {
+        _productRepository.CreateProduct(product);
+        return RedirectToAction("Index");
     }
 }
