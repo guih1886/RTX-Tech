@@ -12,6 +12,20 @@ public class ProductRepository : IProductRepository
         _context = context;
     }
 
+    public List<Product> GetProducts()
+    {
+        List<Product> product = _context.Products.ToList();
+        return product;
+    }
+    public Product? GetProductById(int id)
+    {
+        Product? product = _context.Products.FirstOrDefault(p => p.Id == id);
+        return product;
+    }
+    public List<Product> FilterProductsByNameAndDescription(string filterTerm)
+    {
+        return _context.Products.Where(p => p.Name!.Contains(filterTerm) || p.Description!.Contains(filterTerm)).ToList();
+    }
     public bool CreateProduct(Product product)
     {
         try
@@ -25,14 +39,15 @@ public class ProductRepository : IProductRepository
             return false;
         }
     }
-    public Product? GetProductById(int id)
+    public bool DeleteProduct(int id)
     {
-        Product? product = _context.Products.FirstOrDefault(p => p.Id == id);
-        return product;
-    }
-    public List<Product>? GetProducts()
-    {
-        List<Product>? product = _context.Products.ToList();
-        return product;
+        Product? product = GetProductById(id);
+        if (product != null)
+        {
+            _context.Products.Remove(product);
+            _context.SaveChanges();
+            return true;
+        }
+        else return false;
     }
 }

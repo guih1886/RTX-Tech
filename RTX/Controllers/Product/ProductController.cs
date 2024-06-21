@@ -15,13 +15,45 @@ public class ProductController : Controller
 
     public IActionResult Index()
     {
-        List<Product>? produtos = _productRepository.GetProducts();
-        return View(produtos);
+        List<Product>? products = _productRepository.GetProducts();
+        return View(products);
     }
 
     public IActionResult CreateProduct()
     {
         return View();
+    }
+
+    public IActionResult FilterProducts(string filterTerm)
+    {
+        if (filterTerm == null) return RedirectToAction("Index");
+        List<Product> products = _productRepository.FilterProductsByNameAndDescription(filterTerm);
+        return View(products);
+    }
+
+    public IActionResult DeleteProduct(int id)
+    {
+        _productRepository.DeleteProduct(id);
+        return RedirectToAction("Index");
+    }
+
+    [HttpGet]
+    public IActionResult Details(int id)
+    {
+        Product? product = _productRepository.GetProductById(id);
+        if (product != null)
+        {
+            var json = Json(new
+            {
+                id = product.Id,
+                name = product.Name,
+                description = product.Description,
+                price = product.Price,
+                photo = product.Photo
+            });
+            return Ok(json);
+        }
+        return NotFound(); 
     }
 
     [HttpGet]
@@ -30,21 +62,14 @@ public class ProductController : Controller
         return Ok(_productRepository.GetProducts());
     }
 
-    [HttpGet("{id}")]
-    public IActionResult GetProductDetails(int id)
-    {
-        Models.Product? produto = _productRepository.GetProductById(id);
-        if (produto != null)
-        {
-            return Ok(produto);
-        }
-        return NotFound("Produto não encontrado.");
-    }
-
     [HttpPost]
     public IActionResult CreateProduct(Product product)
     {
-        _productRepository.CreateProduct(product);
-        return RedirectToAction("Index");
+        if (ModelState.IsValid)
+        {
+            _productRepository.CreateProduct(product);
+            return RedirectToAction("Index");
+        }
+        return View(product);
     }
 }
