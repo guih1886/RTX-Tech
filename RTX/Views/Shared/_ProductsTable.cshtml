@@ -1,0 +1,77 @@
+﻿@model List<Product>
+<div class="text-center">
+    <div class="gap-2 d-md-flex justify-content-md-center">
+        <a class="btn btn-primary" role="button" asp-controller="Product" asp-action="CreateProduct">Adicionar Produto</a>
+    </div>
+    @if (Model.Any())
+    {
+        <table class="table table-responsive text-center align-content-center">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Imagem</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Descrição</th>
+                    <th scope="col">Detalhe</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Product product in Model)
+                {
+                    <tr>
+                        <td class="align-content-center">@product.Id</td>
+                        <td class="align-content-center"><img src="@product.Photo" class="img-fluid" style="width: 100px; height: 100px;" alt="@product.Name"></td>
+                        <td class="align-content-center text-break">@product.Name</td>
+                        <td class="align-content-center text-break">@product.Description</td>
+                        <td class="justify-content-">
+                            <a class="btn btn-secondary w-75 mb-1" role="button" onclick="openModal(@product.Id)">Detalhe</a>
+                            <a class="btn btn-danger w-75 mb-1" asp-route-id="@product.Id" role="button" asp-controller="Product" asp-action="DeleteProduct">Excluir</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="modal" tabindex="-1" id="productDetailModal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="d-flex row row-cols-2 align-items-center">
+                                    <img id="photo" class="img-fluid row-col-1 h-100">
+                                    <div class="col">
+                                        <div id="description">Descrição</div>
+                                        <br>
+                                        <div id="price">Preço</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            function openModal(productId) {
+                var url = '/Product/Details/' + productId;
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (response) {
+                        $('#photo').attr('src', response.value.photo);
+                        $('#description').text(response.value.description);
+                        $('#price').text('R$' + response.value.price);
+                    }
+                });
+                $('#productDetailModal').modal('show');
+            }
+        </script>
+    }
+    else
+    {
+        <h3 class="text-center m-4">Sem produtos cadastrados</h3>
+    }
+</div>
