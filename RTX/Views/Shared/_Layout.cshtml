@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@{
+    string filterTerm = "";
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -12,11 +15,11 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid align-content-center">
-                    <a class="navbar-brand">Desafio RTX</a>
+                <a class="navbar-brand">Desafio RTX</a>
                 <div class="align-self-center" id="navbarSupportedContent">
                     <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
+                        <input class="form-control me-2" type="search" placeholder="Pesquisar nome ou descrição" asp-for="@filterTerm">
+                        <button class="btn btn-outline-success" type="submit" asp-route-value="@filterTerm" asp-controller="Product" asp-action="FilterProducts">Procurar</button>
                     </form>
                 </div>
             </div>
